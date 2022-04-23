@@ -18,9 +18,7 @@ jobs:
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Run Tectonic
-        run: |
-          cd ${{ matrix.design }}
-          ./tectonic.sh
+        run: tectonic --keep-logs  ${{ matrix.design }}/main.tex
       - name: Upload PDF
         uses: actions/upload-artifact@v3
         with:
