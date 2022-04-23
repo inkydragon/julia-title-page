@@ -9,18 +9,23 @@ jobs:
   latex-build:
     name: "PDF Build"
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        design: [homepage-patch, homepage+subtitle]
     steps:
       - uses: actions/checkout@v2
       - uses: wtfjoke/setup-tectonic@v1
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
       - name: Run Tectonic
-        run: tectonic --keep-logs  homepage/main.tex
+        run: |
+          cd ${{ matrix.design }}
+          ./tectonic.sh
       - name: Upload PDF
         uses: actions/upload-artifact@v3
         with:
-          name: homepage
+          name: ${{ matrix.design }}
           if-no-files-found: error
           path: |
-            homepage/main.pdf
-            homepage/main.log
+            ${{ matrix.design }}/main.pdf
+            ${{ matrix.design }}/main.log
